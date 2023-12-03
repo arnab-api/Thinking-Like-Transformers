@@ -65,9 +65,224 @@
 
         <h2> Methodology </h2>
 
+        <br>
+        <h4> RASP analogues to different transformer modules </h4>
+
+        <figure>
+          <img src="images/rasp_ops.png" class="center_image" style="width: 45%;">
+          <figcaption>Caption: Components of a Transformer block and their RASP analogues.</figcaption>
+        </figure>
+
+        <br>
+        <h4> Some Illustrative Examples </h4>
+
+        <br>
+        <h5> Example 1: Count the number of times a character c appears in a sequence S </h5>
+
+        Input Format: <span style="font-family:'Courier New'">
+          &ltsequence&gt-&ltc&gt
+        </span> <br>
+
+        RASP Program:
+        <br>
+        <br>
+        <figure>
+          <img src="images/char_rasp.png" style="width: 50%;">
+        </figure>
+        <br>
+
+        <p style="text-align: justify;">
+          The figure below illustrates each step for an input <span style="font-family:'Courier New'">"abaa-a"</span>.
+          This implementation will require 3 transformer
+          layers. Each of the attention and MLP operations will add one new information to the residual stream. The
+          answer will be written after Attn_3.
+        </p>
+
+        <br>
+        <figure>
+          <img src="images/char_occurance.png" class="center_image" style="width: 100%;">
+        </figure>
+        <br>
+
+        <br>
+        <h5> Example 2: Find the minimum element in a sequence </h5>
+
+        Idea: Given a sequence <span style="font-family:'Courier New'">S = [3, 2, 3, 5, 2]</span>, we will calculate 2
+        counts as follows -
+
+        <ol>
+          <li>
+            For each x<sub>i</sub> count the number of elements in S that are less than x<sub>i</sub>
+            <figure>
+              <img src="images/count_less.png" style="width: 30%;">
+            </figure>
+          </li>
+          <li>
+            Also, count the number of elements that appear before x<sub>i</sub> and is equal to x<sub>i</sub>
+            <figure>
+              <img src="images/count_before_eq.png" style="width: 40%;">
+            </figure>
+          </li>
+        </ol>
+
+        For the example sequence, <span style="font-family:'Courier New'">S = [3, 2, 3, 5, 2]</span>, the counts will
+        be<br>
+        <span style="font-family:'Courier New'">count_less = [2, 0, 2, 4, 0]</span> <br>
+        <span style="font-family:'Courier New'">count_before_eq = [0, 0, 1, 0, 1]</span> <br>
+
+        Now, <span style="font-family:'Courier New'">count = count_less + count_before_eq = [2, 0, 3, 4, 1]</span> <br>
+        There will only be one zero in the <span style="font-family:'Courier New'">count</span> sequence and it will be
+        on the index where the minimum element appears first in S.<br>
+        The RASP code with operations and updates at each step is illustrated below
+
+        <br>
+        <br>
+        <figure>
+          <img src="images/minimum.png" class="center_image" style="width: 70%;">
+        </figure>
+        <br>
+
+
+        <br>
+        <br>
+        <h4> Compiling RASP into a transformer model </h4>
+        <p style="text-align: justify;">
+          Once we have a RASP program that solves a task, it is possible to compile that RASP program into an
+          actual
+          transformer model. The longest path in the RASP program from input to output decides the number of
+          layers or
+          the transformer architecture. And, the number of operations being done in parallel decides the number
+          of
+          attention heads per attention block.
+        </p>
+        <p style="text-align: justify;">
+          After we decide on a transformer architecture, the model can be trained with supervision from -
+        <ol>
+          <li>An input-output dataset demonstrating the task, usually how any supervised model is trained.</li>
+          <li>Attention patterns of each of the heads are matched to a corresponding <em>selector</em> pattern
+            in the
+            RASP program.</li>
+        </ol>
+
+        <figure>
+          <img src="images/compiling.png" class="center_image" style="width: 90%;">
+          <figcaption>(a) shows the RASP program that solves the double histogram problem. The program uses
+            three
+            attention operators. (b) shows the selector pattern for the 3 attention operations for an input
+            sequence
+            <span style="font-family:'Courier New'">"§aaabbccdef"</span>. (c) shows the corresponding attention
+            heatmaps
+            for a transformer model trained to solve the
+            task with the attention pattern specified by the selectors of the RASP program.
+          </figcaption>
+        </figure>
+
+        Two followup works by <a href="https://arxiv.org/pdf/2301.05062.pdf" target="_blank">Lindner et al
+          2023</a> and
+        <a href="https://arxiv.org/pdf/2306.01128.pdf" target="_blank">Friedman et al 2023</a> presented
+        compilers that
+        generate a transformer
+        model given a RASP program and a set of input-output demonstration pairs.
+
+        </p>
+
         <h2> Related Works </h2>
 
-        <h2> Applications and Social Impact </h2>
+        <h2> Applications </h2>
+        <br>
+        <h4> Testing Interpretability Tools </h4>
+        <p style="text-align: justify;">
+          Interpretability is a budding field that seeks to understand how neural networks work by decompiling
+          their
+          inner-workings as a human-readable algorithm or program. Weiss et al. here take an opposite approach -
+          solving
+          a particular problem with RASP that only allows operations analogous to different components of a
+          transformer.
+          This allows us to <em>compile</em> a RASP solution to a transformer model that is interpretable by
+          design.
+          These
+          interpretable toy models may not be very useful in practice, but that can be used as test cases for
+          different
+          tools or approaches aimed at understanding the functioning of a more complicated neural network.
+        </p>
+
+        <figure>
+          <img src="images/tracr.png" class="center_image" style="width: 40%;">
+          <figcaption>Caption: Toy models compiled to follow a known mechanism can be used as unit tests for
+            interpretability tools.</figcaption>
+          <figcaption>** Figure taken from <a href="https://arxiv.org/pdf/2301.05062.pdf" target="_blank">Lindner et
+              al.
+              2023</a> (Figure 1). <em>Tracr</em>
+            is their compiler to compile
+            RASP into a transformer.</figcaption>
+        </figure>
+
+        <br>
+        <h4> Customize Transformers for Specific Tasks </h4>
+        <p style="text-align: justify;">
+          Although transformer architectures are being used in different situations, the current paradigm of how
+          the
+          modules are ordered is somewhat consistent - attention and MLP are interleaved with attention followed
+          by
+          MLP
+          in each transformer block, just as suggested by <a
+            href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf"
+            target="_blank">Vaswani et al 2017</a>. <a href="https://arxiv.org/abs/1911.03864" target="_blank">Press
+            et
+            al 2023</a> found that re-ordering
+          MLP and attention modules can have significant implications on task performance. Specifically, they
+          find
+          that,
+          provided there is some interleaving in the middle - 1) pushing MLPs towards earlier in the computation
+          weakened the model's capability to learn language, 2) while pushing attentions towards earlier
+          resulted in a
+          stronger language model. This insight suggests that transformers with different architectures may be
+          helpful
+          in learning different tasks. And, RASP may help design such customized transformers and evaluate their
+          differences. However, at this point, this is just a speculation and we will later discuss how RASP
+          operations
+          are not completely faithful to different modules of a transformer block.
+        </p>
+
+        <br>
+        <h4> An Educational Tool </h4>
+        <p style="text-align: justify;">
+          Solving different problems with RASP, may help develop intuitions on how different modules of a
+          transformer
+          work and also their respective capabilities. This may be useful as an educational tool for training
+          researchers or industry practitioners interested in working with transformers.
+        </p>
+
+        <h2> Social Impact </h2>
+
+        <p style="text-align: justify;">
+          As of November 30, 2023, this paper has only 40 citations. It is impressive considering that the paper
+          was
+          published only two years ago, however it has not been “very impactful” yet. But, here is one scenario
+          where
+          this
+          paper may end up have some impact (although this is very speculative) -
+        </p>
+
+        <p style="text-align: justify;">
+          The impact of this paper may grow in future based on development in the field of interpretability. In
+          the
+          future, there might be some interpretability tool that claims to understand a category of phenomena in
+          models.
+          A
+          simple toy task under that category may be solved with a RASP program and then compiled into a
+          transformer
+          model. And, that model may be used to evaluate the efficacy of the interpretability tool. <br>
+          As artificial models get increasingly capable and get more integrated into different aspects of our
+          daily
+          lives,
+          policy-makers may want to make sure that these models are safe for deployment. And, this paper may
+          have laid
+          the
+          groundwork for testing a subset of the tools that will be used to ensure the safety of artificial
+          models.
+        </p>
+
 
         <h2> Follow-on Research </h2>
 
@@ -75,12 +290,104 @@
 
         <h2> Review </h2>
 
+        <p style="text-align: justify;">
+          This paper proposes a <em>restricted</em> programming language RASP, where a user can only use
+          operations
+          that
+          are roughly analogous to the workings of different modules of a transformer model. The authors argue
+          that
+          using RASP will allow
+          people to <em>"think like transformers"</em> and provide experimental evidence with some toy problems
+          that
+          human
+          intuition can even be <em>compiled</em> into transformer models.
+        </p>
+
+        <p style="text-align: justify;">
+          The strengths of this paper has been already discussed in this blog - RASP can be used as an
+          educational
+          tool
+          to devolop intuitions on how different modules of a transformer block work. It may even inform us on
+          how to
+          customize different
+          transformer architectures targeting specific problems. And, there might be a future where this
+          approach can
+          be
+          used to test a subset of tools for ensuring that a transformer model is safe for deployment, although
+          currently this is just a speculation of the authors of this blog.
+        </p>
+
+        <p style="text-align: justify;">
+          One weakness of this work is that RASP operations are not completely faithful to how different
+          components of
+          a
+          transformer block work in practice. For example:
+        <ol style="text-align: justify;">
+          <li>
+            RASP completely ignores Layernorms (<a href="https://arxiv.org/abs/1607.06450" target="_blank">Ba et
+              al.
+              2016</a>).
+            Layernorms are used in
+            transformers before each of
+            the attention and MLP operations, and also finally before decoding the latent back to vocabulary
+            space.
+            This
+            ensures stability in training and improves the performance. Element-wise operations in RASP, which
+            are
+            analogous to MLP, may be used to perform element-wise mathematical operations, such as;
+            multiplications
+            and
+            divisions. But, the effect of Layernorms may wash out these operations in practice.
+          </li>
+
+          <li>
+            RASP makes the assumption that information stored in intermediate variables will be stored <em>as it
+              is</em>
+            in the
+            residual stream. In theory this may be achieved by ensuring mutually orthogonal subspaces for all
+            the
+            intermediate variables. However, in practice transformers only have a limited number of dimensions
+            in
+            the
+            residual stream. Thus it is most likely that subsequent attention and MLP modules may rewrite or
+            even
+            delete
+            some of those variables.
+          </li>
+
+          <li>
+            RASP emulates the attention pattern with a binary <em>selector</em> and as a result all the values
+            that
+            get
+            <em>attended</em> by a query
+            gets equal amounts of <em>attention</em>. In practice, however, the attention pattern has continuous
+            values
+            and
+            attention paid to every single value can be different.
+          </li>
+
+        </ol>
+
+        Despite certain weaknesses this paper can be lauded for the novelty of its main idea. Overall the paper
+        was
+        well
+        presented and easy to follow.
+
+        </p>
+
         <h3> References</h3>
 
-        <p><a name="bottou-1990">[1]</a> <a href="https://papers.baulab.info/Bottou-1990.pdf">L&eacute;on Bottou and
+        <p><a name="bottou-1990">[1]</a> <a href="https://papers.baulab.info/Bottou-1990.pdf"
+            target="_blank">L&eacute;on Bottou and
             Patrick Gallinari.
             <em>A framework for the cooperation of learning algorithms.</em></a>
           Advances in neural information processing systems 3 (1990).
+        </p>
+
+        <p>
+          <a name="ba-2016">[2]</a> <a href="https://arxiv.org/abs/1607.06450">
+            Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton.
+            <em>Layer normalization</em></a> (2016)
         </p>
 
         <h2>Team Members</h2>
@@ -88,9 +395,6 @@
           <li><a href="" target="_blank">David Atkinson</a></li>
           <li><a href="https://arnab-api.github.io/" target="_blank">Arnab Sen Sharma</a></li>
         </ul>
-
-        <p>Make sure to list here is who is on the team.</p>
-
 
       </div><!--col-->
     </div><!--row -->
