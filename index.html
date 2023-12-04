@@ -3,11 +3,11 @@
 
 <head>
   <title>Thinking Like Transformers</title>
-  <meta property="og:title" content=Your Project Name" />
-  <meta name="twitter:title" content="Your Project Name" />
-  <meta name="description" content="Your project about your cool topic described right here." />
-  <meta property="og:description" content="Your project about your cool topic described right here." />
-  <meta name="twitter:description" content="Your project about your cool topic described right here." />
+  <meta property="og:title" content="Thinking Like Transformers" />
+  <meta name="twitter:title" content="Thinking Like Transformers" />
+  <meta name="description" content="An analysis of Thinking Like Transformers paper by Weiss et al." />
+  <meta property="og:description" content="An analysis of Thinking Like Transformers paper by Weiss et al." />
+  <meta name="twitter:description" content="An analysis of Thinking Like Transformers paper by Weiss et al." />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -185,7 +185,7 @@
           <span style="color: red;"><b>value</b></span>
           <span style="color: darkred;"><b>)</b></span>
         </span>
-        <br>
+        <br><br>
 
         And, generates a sequence of the same length by aggregating the values in the <span
           style="color:red; font-family: 'Courier New', Courier, monospace;"><b>value</b></span> sequence as per
@@ -199,12 +199,13 @@
         </figure>
         <br>
 
-        From here on, we will use the following concise diagram to illustrate how a single attention head is emulated by
-        using a
+        From here on, we will borrow the following concise diagram from <a href="https://github.com/srush/raspy"
+          target="_blank"><u>RASPy</u></a> to illustrate how a single attention head is
+        emulated
+        using a pair of
         <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> -
-        <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span> pair of
-        operations
-        - <br>
+        <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>
+        operations. <br>
 
         <br>
         <figure>
@@ -271,13 +272,18 @@
 
         <ol>
           <li>
-            For each x<sub>i</sub> count the number of elements in S that are less than x<sub>i</sub>
+            For each <span style="font-family: Georgia, 'Times New Roman', Times, serif;"><i>x<sub>i</sub></i></span>,
+            count the
+            number of elements in S that are less than <span
+              style="font-family: Georgia, 'Times New Roman', Times, serif;"><i>x<sub>i</sub></i></span>
             <figure>
               <img src="images/count_less.png" style="width: 30%;">
             </figure>
           </li>
           <li>
-            Also, count the number of elements that appear before x<sub>i</sub> and is equal to x<sub>i</sub>
+            Also, count the number of elements that appear before <span
+              style="font-family: Georgia, 'Times New Roman', Times, serif;"><i>x<sub>i</sub></i></span> and is equal to
+            <span style="font-family: Georgia, 'Times New Roman', Times, serif;"><i>x<sub>i</sub></i></span>
             <figure>
               <img src="images/count_before_eq.png" style="width: 40%;">
             </figure>
