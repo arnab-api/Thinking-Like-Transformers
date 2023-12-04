@@ -63,15 +63,174 @@
         </p> -->
         <h2> Introduction/Motivation </h2>
 
-        <h2> Methodology </h2>
+        <h2> <b>R</b>estricted <b>A</b>ccess <b>S</b>equence <b>P</b>rocessing (RASP) </h2>
 
         <br>
-        <h4> RASP analogues to different transformer modules </h4>
+        <h4> Analogues to different transformer modules </h4>
 
         <figure>
           <img src="images/rasp_ops.png" class="center_image" style="width: 45%;">
           <figcaption>Caption: Components of a Transformer block and their RASP analogues.</figcaption>
         </figure>
+
+        <br>
+        <h5> Sequence Operators (S-Ops)</h5>
+        <p style="text-align: justify;">
+
+          S-ops in RASP are operations that take a sequence as input and generate a sequence of the same length as
+          output.
+          Operations of MLP and attention blocks in a transformer are emulated as S-Ops in RASP. RASP also provides two
+          built-in S-Ops - <br>
+
+          <span style="font-family: 'Courier New', Courier, monospace;">
+            &nbsp; tokens("hello") = [h, e, l, l, o] <br>
+            &nbsp; indices("hello") = [0, 1, 2, 3, 4] <br>
+          </span>
+        </p>
+
+        <br>
+        <h5> Element-wise Operators </h5>
+        <p style="text-align: justify;">
+
+          These operations are analogous to element-wise transformations performed by an MLPs.
+        <figure>
+          <img src="images/mlp_op.png" class="center_image" style="width: 35%;">
+        </figure>
+        <br>
+
+        An example of such operations will be - <br>
+
+        <span style="font-family: 'Courier New', Courier, monospace;">
+          &nbsp; 3 * indices("hello") = [0, 3, 6, 9, 12] <br>
+        </span>
+
+        </p>
+
+        <br>
+        <h5> Select and Aggregate Operations </h5>
+        <p style="text-align: justify;">
+          Mechanism of a single attention head can be emulated in RASP with a combination of
+          <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select()</b></span> and
+          <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate()</b></span>
+          operations.
+        </p>
+
+        <p style="text-align: justify;">
+          <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select()</b></span>
+          takes two sequences; the
+          <span style="color: darkorange; font-family: 'Courier New', Courier, monospace;"><b>key</b></span>
+          and the
+          <span style="color: teal; font-family: 'Courier New', Courier, monospace;"><b>query</b></span>
+          as input. And, generates a <em>binary</em> mask using
+          them. In RASP, this binary mask is called a <em>selector</em>. <br>
+
+          &nbsp
+          <span style="font-family: 'Courier New', Courier, monospace;">
+            <span style="color: palevioletred;"><b>select(</b></span>
+            <span style="color: darkorange;"><b>key</b></span>
+            <span style="color: palevioletred;"><b>,</b></span>
+            <span style="color: teal;"><b>query</b></span>
+            <span style="color: palevioletred;"><b>,</b></span>
+            <b>binary op</b>
+            <span style="color: palevioletred;"><b>)</b></span>
+          </span>
+          <br><br>
+          The <em>selector</em> mask is be a square matrix with binary values that is analogous to the attention
+          pattern of a single attention head.<br>
+
+          The value in cell <span style="font-family: 'Courier New', Courier, monospace;">(i, j)</span> of seletor is
+          decided as follows - <br>
+
+          &nbsp
+          <span style="font-family: 'Courier New', Courier, monospace;">
+            <span style="color: black;"><b>selector(i, j) = </b></span>
+            <span style="color: teal;"><b>query(i)</b></span>
+            <span style="color: black;"><b>op</b></span>
+            <span style="color: darkorange;"><b>key(j)</b></span>
+          </span>
+          <br><br>
+
+          To illustrate this,
+          <span style="font-family: 'Courier New', Courier, monospace;">
+            <span style="color: palevioletred;"><b>select(</b></span>
+            <span style="color: darkorange;"><b>key = [1, 2, 3, 4, 5]</b></span>
+            <span style="color: palevioletred;"><b>,</b></span>
+            <span style="color: teal;"><b>query = [0, 1, 2, 3, 4]</b></span>
+            <span style="color: palevioletred;"><b>,</b></span>
+            <b>>=</b>
+            <span style="color: palevioletred;"><b>)</b></span>
+          </span>
+          will generate a selector as follows - <br>
+
+        <figure>
+          <img src="images/selector_example.png" class="center_image" style="width: 20%;">
+        </figure>
+
+        In RASP, <span
+          style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select()</b></span> is always
+        followed by an
+        <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate()</b></span>
+        operation. <span
+          style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate()</b></span> operation
+        takes a
+        <span style="font-family: 'Courier New', Courier, monospace;"><b>selector</b></span> matrix and a
+        <span style="color: red; font-family: 'Courier New', Courier, monospace;"><b>value</b></span> sequence as input,
+        like below - <br>
+
+        &nbsp
+        <span style="font-family: 'Courier New', Courier, monospace;">
+          <span style="color: darkred;"><b>aggregate(</b></span>
+          <b>selector</b>
+          <span style="color: darkred;"><b>,</b></span>
+          <span style="color: red;"><b>value</b></span>
+          <span style="color: darkred;"><b>)</b></span>
+        </span>
+        <br>
+
+        And, generates a sequence of the same length by aggregating the values in the <span
+          style="color:red; font-family: 'Courier New', Courier, monospace;"><b>value</b></span> sequence as per
+        the mixture
+        defined in the rows of the <span style="font-family: 'Courier New', Courier, monospace;"><b>selector</b></span>
+        matrix. <br>
+
+        <br>
+        <figure>
+          <img src="images/aggregate_eqn.png" class="center_image" style="width: 80%;">
+        </figure>
+        <br>
+
+        From here on, we will use the following concise diagram to illustrate how a single attention head is emulated by
+        using a
+        <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> -
+        <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span> pair of
+        operations
+        - <br>
+
+        <br>
+        <figure>
+          <img src="images/rasp_attn.png" class="center_image" style="width: 60%;">
+        </figure>
+        <br>
+
+        </p>
+
+        <label>
+          <input type="checkbox" class="alertCheckbox" autocomplete="off" />
+          <div class="alert error">
+            <span class="alertText">
+              <ul style="list-style-type: none;">
+                <li>** A RASP selector is a square grid of binary values, whereas an attention pattern is a grid of
+                  continuous values. Also, in an attention pattern, values in a row must sum to 1 due to the softmax
+                  applied on scaled attention. RASP doesn't impose this on a selector either.</li>
+                <li>** The RASP paper aggregates as mean whereas in this example we are aggregating as sum, similar to
+                  the implementation of <a href="https://github.com/srush/raspy" target="_blank"
+                    style="color: brown;"><i><u>RASPy</u></i></a>. </li>
+              </ul>
+            </span>
+          </div>
+        </label>
+
+
 
         <br>
         <h4> Some Illustrative Examples </h4>
@@ -377,17 +536,61 @@
 
         <h3> References</h3>
 
-        <p><a name="bottou-1990">[1]</a> <a href="https://papers.baulab.info/Bottou-1990.pdf"
+        <!-- <p><a name="bottou-1990">[1]</a> <a href="https://papers.baulab.info/Bottou-1990.pdf"
             target="_blank">L&eacute;on Bottou and
             Patrick Gallinari.
             <em>A framework for the cooperation of learning algorithms.</em></a>
           Advances in neural information processing systems 3 (1990).
+        </p> -->
+
+        <p>
+          <a name="lindner-2023">[2]</a>
+          Lindner, David, János Kramár, Matthew Rahtz, Thomas McGrath, and Vladimir Mikulik.
+          <a href="https://arxiv.org/abs/2301.05062">
+            <em>"Tracr: Compiled transformers as a laboratory for interpretability."</em>
+          </a> (2023)
         </p>
 
         <p>
-          <a name="ba-2016">[2]</a> <a href="https://arxiv.org/abs/1607.06450">
-            Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton.
-            <em>Layer normalization</em></a> (2016)
+          <a name="friedman-2023">[2]</a>
+          Friedman, Dan, Alexander Wettig, and Danqi Chen.
+          <a href="https://arxiv.org/abs/2306.01128">
+            <em>"Learning Transformer Programs."</em>
+          </a> (2023)
+        </p>
+
+        <p>
+          <a name="raspy">[2]</a>
+          Sasha Rush and Gail Weiss.
+          <a href="https://srush.github.io/raspy/">
+            <em>"RASPy"</em>
+          </a>
+        </p>
+
+        <p>
+          <a name="vaswani-2017">[2]</a>
+          Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, and
+          Illia Polosukhin.
+          <a
+            href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">
+            <em>"Attention is all you need."</em>
+          </a> (2017)
+        </p>
+
+        <p>
+          <a name="press-2019">[2]</a>
+          Press, Ofir, Noah A. Smith, and Omer Levy.
+          <a href="https://arxiv.org/abs/1911.03864">
+            <em>"Improving transformer models by reordering their sublayers."</em>
+          </a> (2019)
+        </p>
+
+        <p>
+          <a name="ba-2016">[2]</a>
+          Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton.
+          <a href="https://arxiv.org/abs/1607.06450">
+            <em>"Layer normalization."</em>
+          </a> (2016)
         </p>
 
         <h2>Team Members</h2>
