@@ -66,7 +66,7 @@
         <h2> <b>R</b>estricted <b>A</b>ccess <b>S</b>equence <b>P</b>rocessing (RASP) </h2>
 
         <br>
-        <h4> Analogues to different transformer modules </h4>
+        <h4> Analogues to components in a transformer block</h4>
 
         <figure>
           <img src="images/rasp_ops.png" class="center_image" style="width: 45%;">
@@ -78,14 +78,21 @@
         <p style="text-align: justify;">
 
           S-ops in RASP are operations that take a sequence as input and generate a sequence of the same length as
-          output.
-          Operations of MLP and attention blocks in a transformer are emulated as S-Ops in RASP. RASP also provides two
-          built-in S-Ops - <br>
+          output. Functions of MLP and attention blocks in a transformer are emulated as S-Ops in RASP. RASP also
+          provides two built-in S-Ops: <br>
 
-          <span style="font-family: 'Courier New', Courier, monospace;">
-            &nbsp; tokens("hello") = [h, e, l, l, o] <br>
-            &nbsp; indices("hello") = [0, 1, 2, 3, 4] <br>
-          </span>
+        <div class="card">
+          <!-- <h3 class="card-header">bibliography</h3> -->
+          <div class="card-block">
+            <p class="card-text clickselect">
+              <span style="font-family: 'Courier New', Courier, monospace;">
+                &nbsp; tokens("hello") = [h, e, l, l, o] <br>
+                &nbsp; indices("hello") = [0, 1, 2, 3, 4] <br>
+              </span>
+            </p>
+          </div>
+        </div>
+
         </p>
 
         <br>
@@ -98,18 +105,25 @@
         </figure>
         <br>
 
-        An example of such operations will be - <br>
+        An example of such operations will be: <br><br>
 
-        <span style="font-family: 'Courier New', Courier, monospace;">
-          &nbsp; 3 * indices("hello") = [0, 3, 6, 9, 12] <br>
-        </span>
+        <div class="card">
+          <!-- <h3 class="card-header">bibliography</h3> -->
+          <div class="card-block">
+            <p class="card-text clickselect">
+              <span style="font-family: 'Courier New', Courier, monospace;">
+                &nbsp; 3 * indices("hello") = [0, 3, 6, 9, 12] <br>
+              </span>
+            </p>
+          </div>
+        </div>
 
         </p>
 
         <br>
         <h5> Select and Aggregate Operations </h5>
         <p style="text-align: justify;">
-          Mechanism of a single attention head can be emulated in RASP with a combination of
+          RASP emulates the mechanism of a single attention head with a combination of
           <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select()</b></span> and
           <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate()</b></span>
           operations.
@@ -121,46 +135,55 @@
           <span style="color: darkorange; font-family: 'Courier New', Courier, monospace;"><b>key</b></span>
           and the
           <span style="color: teal; font-family: 'Courier New', Courier, monospace;"><b>query</b></span>
-          as input. And, generates a <em>binary</em> mask using
+          as input, and generates a <em>binary</em> mask using
           them. In RASP, this binary mask is called a <em>selector</em>. <br>
 
-          &nbsp
-          <span style="font-family: 'Courier New', Courier, monospace;">
-            <span style="color: palevioletred;"><b>select(</b></span>
-            <span style="color: darkorange;"><b>key</b></span>
-            <span style="color: palevioletred;"><b>,</b></span>
-            <span style="color: teal;"><b>query</b></span>
-            <span style="color: palevioletred;"><b>,</b></span>
-            <b>binary op</b>
-            <span style="color: palevioletred;"><b>)</b></span>
-          </span>
-          <br><br>
-          The <em>selector</em> mask is be a square matrix with binary values that is analogous to the attention
-          pattern of a single attention head.<br>
+        <div class="card">
+          <!-- <h3 class="card-header">bibliography</h3> -->
+          <div class="card-block">
+            <p class="card-text clickselect">
+              &nbsp &nbsp
+              <span style="font-family: 'Courier New', Courier, monospace;">
+                <span style="color: palevioletred;"><b>select(</b></span>
+                <span style="color: darkorange;"><b>key</b></span>
+                <span style="color: palevioletred;"><b>,</b></span>
+                <span style="color: teal;"><b>query</b></span>
+                <span style="color: palevioletred;"><b>,</b></span>
+                <b>binary op</b>
+                <span style="color: palevioletred;"><b>)</b></span>
+              </span>
+            </p>
+          </div>
+        </div>
 
-          The value in cell <span style="font-family: 'Courier New', Courier, monospace;">(i, j)</span> of seletor is
-          decided as follows - <br>
+        <br><br>
+        The <em>selector</em> mask is be a square matrix with binary values that is analogous to the attention
+        pattern of a single attention head.<br>
 
-          &nbsp
-          <span style="font-family: 'Courier New', Courier, monospace;">
-            <span style="color: black;"><b>selector(i, j) = </b></span>
-            <span style="color: teal;"><b>query(i)</b></span>
-            <span style="color: black;"><b>op</b></span>
-            <span style="color: darkorange;"><b>key(j)</b></span>
-          </span>
-          <br><br>
+        The value in cell <span style="font-family: 'Courier New', Courier, monospace;">(i, j)</span> of
+        <em>seletor</em> is
+        decided as:
 
-          To illustrate this,
-          <span style="font-family: 'Courier New', Courier, monospace;">
-            <span style="color: palevioletred;"><b>select(</b></span>
-            <span style="color: darkorange;"><b>key = [1, 2, 3, 4, 5]</b></span>
-            <span style="color: palevioletred;"><b>,</b></span>
-            <span style="color: teal;"><b>query = [0, 1, 2, 3, 4]</b></span>
-            <span style="color: palevioletred;"><b>,</b></span>
-            <b>>=</b>
-            <span style="color: palevioletred;"><b>)</b></span>
-          </span>
-          will generate a selector as follows - <br>
+        &nbsp
+        <span style="font-family: 'Courier New', Courier, monospace;">
+          <span style="color: black;"><b>selector(i, j) = </b></span>
+          <span style="color: teal;"><b>query(i)</b></span>
+          <span style="color: black;"><b>op</b></span>
+          <span style="color: darkorange;"><b>key(j)</b></span>
+        </span>
+        <br><br>
+
+        To illustrate this,
+        <span style="font-family: 'Courier New', Courier, monospace;">
+          <span style="color: palevioletred;"><b>select(</b></span>
+          <span style="color: darkorange;"><b>key = [1, 2, 3, 4, 5]</b></span>
+          <span style="color: palevioletred;"><b>,</b></span>
+          <span style="color: teal;"><b>query = [0, 1, 2, 3, 4]</b></span>
+          <span style="color: palevioletred;"><b>,</b></span>
+          <b>>=</b>
+          <span style="color: palevioletred;"><b>)</b></span>
+        </span>
+        will generate the following <em>selector</em> - <br>
 
         <figure>
           <img src="images/selector_example.png" class="center_image" style="width: 20%;">
@@ -170,26 +193,33 @@
           style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select()</b></span> is always
         followed by an
         <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate()</b></span>
-        operation. <span
-          style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate()</b></span> operation
+        operation, which
         takes a
         <span style="font-family: 'Courier New', Courier, monospace;"><b>selector</b></span> matrix and a
         <span style="color: red; font-family: 'Courier New', Courier, monospace;"><b>value</b></span> sequence as input,
-        like below - <br>
+        like below - <br> <br>
 
-        &nbsp
-        <span style="font-family: 'Courier New', Courier, monospace;">
-          <span style="color: darkred;"><b>aggregate(</b></span>
-          <b>selector</b>
-          <span style="color: darkred;"><b>,</b></span>
-          <span style="color: red;"><b>value</b></span>
-          <span style="color: darkred;"><b>)</b></span>
-        </span>
-        <br><br>
+        <div class="card">
+          <!-- <h3 class="card-header">bibliography</h3> -->
+          <div class="card-block">
+            <p class="card-text clickselect">
+              &nbsp &nbsp
+              <span style="font-family: 'Courier New', Courier, monospace;">
+                <span style="color: darkred;"><b>aggregate(</b></span>
+                <b>selector</b>
+                <span style="color: darkred;"><b>,</b></span>
+                <span style="color: red;"><b>value</b></span>
+                <span style="color: darkred;"><b>)</b></span>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <br>
 
         And, generates a sequence of the same length by aggregating the values in the <span
           style="color:red; font-family: 'Courier New', Courier, monospace;"><b>value</b></span> sequence as per
-        the mixture
+        the <em>mixture</em>
         defined in the rows of the <span style="font-family: 'Courier New', Courier, monospace;"><b>selector</b></span>
         matrix. <br>
 
@@ -209,27 +239,28 @@
 
         <br>
         <figure>
-          <img src="images/rasp_attn.png" class="center_image" style="width: 60%;">
+          <img src="images/rasp_attn.png" class="center_image" style="width: 65%;">
         </figure>
         <br>
 
         </p>
 
-        <label>
-          <input type="checkbox" class="alertCheckbox" autocomplete="off" />
-          <div class="alert error">
-            <span class="alertText">
-              <ul style="list-style-type: none;">
-                <li>** A RASP selector is a square grid of binary values, whereas an attention pattern is a grid of
-                  continuous values. Also, in an attention pattern, values in a row must sum to 1 due to the softmax
-                  applied on scaled attention. RASP doesn't impose this on a selector either.</li>
-                <li>** The RASP paper aggregates as mean whereas in this example we are aggregating as sum, similar to
-                  the implementation of <a href="https://github.com/srush/raspy" target="_blank"
-                    style="color: brown;"><i><u>RASPy</u></i></a>. </li>
-              </ul>
-            </span>
-          </div>
-        </label>
+        <div class="alert error">
+          <span class="alertText" style="color:darkred;">
+            ** A RASP selector is a square matrix of binary values, whereas an attention pattern has
+            continuous values. Also, in an attention pattern, values in a row must sum to 1 due to the softmax
+            applied on scaled attention. RASP doesn't impose this on a selector either.</li>
+          </span>
+        </div>
+
+        <div class="alert warning">
+          <span class="alertText" style="color:black; text-align: left;">
+            ** In RASP, values are aggregated as the mean. However, in this analysis we show aggregation as sum,
+            similar to the implementation of <a href="https://github.com/srush/raspy" target="_blank"
+              style="color: darkblue;"><i><u>RASPy</u></i></a>.
+            </ul>
+          </span>
+        </div>
 
 
 
@@ -254,8 +285,8 @@
         <p style="text-align: justify;">
           The figure below illustrates each step for an input <span style="font-family:'Courier New'">"abaa-a"</span>.
           This implementation will require 3 transformer
-          layers. Each of the attention and MLP operations will add one new information to the residual stream. The
-          answer will be written after Attn_3.
+          layers. Each of the attention and MLP operations will add one set of new information to the residual streams.
+          The answer will be written after Attn_3.
         </p>
 
         <br>
@@ -292,13 +323,16 @@
 
         For the example sequence, <span style="font-family:'Courier New'">S = [3, 2, 3, 5, 2]</span>, the counts will
         be<br>
+
+        <br>
         <span style="font-family:'Courier New'">count_less = [2, 0, 2, 4, 0]</span> <br>
         <span style="font-family:'Courier New'">count_before_eq = [0, 0, 1, 0, 1]</span> <br>
+        And, <span style="font-family:'Courier New'">count = count_less + count_before_eq = [2, 0, 3, 4, 1]</span> <br>
+        <br>
 
-        Now, <span style="font-family:'Courier New'">count = count_less + count_before_eq = [2, 0, 3, 4, 1]</span> <br>
         There will only be one zero in the <span style="font-family:'Courier New'">count</span> sequence and it will be
         on the index where the minimum element appears first in S.<br>
-        The RASP code with operations and updates at each step is illustrated below
+        The RASP code with operations and updates at each step is illustrated below.
 
         <br>
         <br>
@@ -312,21 +346,20 @@
         <br>
         <h4> Compiling RASP into a transformer model </h4>
         <p style="text-align: justify;">
-          Once we have a RASP program that solves a task, it is possible to compile that RASP program into an
-          actual
-          transformer model. The longest path in the RASP program from input to output decides the number of
-          layers or
-          the transformer architecture. And, the number of operations being done in parallel decides the number
-          of
-          attention heads per attention block.
+          Once we have a RASP program that solves a certain task, it is possible to compile that RASP program into an
+          actual transformer model. The longest path in the RASP program from input to output decides the number of
+          transformer layers. And, the number of independent
+          <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> -
+          <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>
+          operations being done in parallel decides the number of attention heads per layer.
         </p>
         <p style="text-align: justify;">
           After we decide on a transformer architecture, the model can be trained with supervision from -
         <ol>
-          <li>An input-output dataset demonstrating the task, usually how any supervised model is trained.</li>
+          <li>An dataset with input-output pairs that demonstrates the task, how any supervised model is usually
+            trained.</li>
           <li>Attention patterns of each of the heads are matched to a corresponding <em>selector</em> pattern
-            in the
-            RASP program.</li>
+            in the RASP program.</li>
         </ol>
 
         <figure>
@@ -357,18 +390,13 @@
         <br>
         <h4> Testing Interpretability Tools </h4>
         <p style="text-align: justify;">
-          Interpretability is a budding field that seeks to understand how neural networks work by decompiling
-          their
-          inner-workings as a human-readable algorithm or program. Weiss et al. here take an opposite approach -
-          solving
-          a particular problem with RASP that only allows operations analogous to different components of a
-          transformer.
-          This allows us to <em>compile</em> a RASP solution to a transformer model that is interpretable by
-          design.
-          These
-          interpretable toy models may not be very useful in practice, but that can be used as test cases for
-          different
-          tools or approaches aimed at understanding the functioning of a more complicated neural network.
+          Interpretability is a budding field that seeks to understand how neural networks work by <em>decompiling</em>
+          them into human-readable algorithm or program. Weiss et al. here take an opposite approach in this paper -
+          solving a particular problem with RASP that only allows operations analogous to different components of a
+          transformer. This RASP solution can be <em>compiled</em> into a transformer model that is interpretable
+          by design. These interpretable toy models may not be very useful in practice, but that can be used as test
+          cases for different tools or approaches aimed at understanding the functioning of a more intricate transformer
+          model.
         </p>
 
         <figure>
@@ -386,66 +414,46 @@
         <h4> Customize Transformers for Specific Tasks </h4>
         <p style="text-align: justify;">
           Although transformer architectures are being used in different situations, the current paradigm of how
-          the
-          modules are ordered is somewhat consistent - attention and MLP are interleaved with attention followed
-          by
-          MLP
-          in each transformer block, just as suggested by <a
+          the components are ordered is somewhat consistent - attention and MLP are interleaved with attention followed
+          by MLP in each transformer block, just as suggested by <a
             href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf"
-            target="_blank">Vaswani et al 2017</a>. <a href="https://arxiv.org/abs/1911.03864" target="_blank">Press
-            et
-            al 2023</a> found that re-ordering
+            target="_blank">Vaswani et al 2017</a>.
+          <a href="https://arxiv.org/abs/1911.03864" target="_blank">Press et al 2023</a> found that re-ordering
           MLP and attention modules can have significant implications on task performance. Specifically, they
-          find
-          that,
-          provided there is some interleaving in the middle - 1) pushing MLPs towards earlier in the computation
-          weakened the model's capability to learn language, 2) while pushing attentions towards earlier
-          resulted in a
-          stronger language model. This insight suggests that transformers with different architectures may be
-          helpful
-          in learning different tasks. And, RASP may help design such customized transformers and evaluate their
-          differences. However, at this point, this is just a speculation and we will later discuss how RASP
-          operations
-          are not completely faithful to different modules of a transformer block.
+          found that, provided there is some interleaving in the middle - 1) pushing MLPs towards earlier in the
+          computation weakened the model's capability to learn language, 2) while pushing attentions towards earlier
+          resulted in a stronger language model. This insight suggests that transformers with different architectures
+          may be helpful in learning different tasks. And, RASP may help design such customized transformers and
+          evaluate their differences. However, we will later discuss how
+          RASP operations are not completely faithful to the components of a transformer block.
         </p>
 
         <br>
         <h4> An Educational Tool </h4>
         <p style="text-align: justify;">
           Solving different problems with RASP, may help develop intuitions on how different modules of a
-          transformer
-          work and also their respective capabilities. This may be useful as an educational tool for training
-          researchers or industry practitioners interested in working with transformers.
+          transformer work and also their respective capabilities. This may be useful as an educational tool for
+          training researchers or industry practitioners interested in working with transformers.
         </p>
 
         <h2> Social Impact </h2>
 
         <p style="text-align: justify;">
-          As of November 30, 2023, this paper has only 40 citations. It is impressive considering that the paper
-          was
-          published only two years ago, however it has not been “very impactful” yet. But, here is one scenario
-          where
-          this
-          paper may end up have some impact (although this is very speculative) -
+          As of December 4, 2023, this paper has only 40 citations. It is impressive considering that the paper
+          was published only two years ago, however it has not been "very impactful" yet. But, here is one scenario
+          where this paper may end up have some impact (although this is very speculative) -
         </p>
 
         <p style="text-align: justify;">
           The impact of this paper may grow in future based on development in the field of interpretability. In
-          the
           future, there might be some interpretability tool that claims to understand a category of phenomena in
-          models.
-          A
-          simple toy task under that category may be solved with a RASP program and then compiled into a
-          transformer
-          model. And, that model may be used to evaluate the efficacy of the interpretability tool. <br>
+          models. A simple toy task under that category may be solved with a RASP program and then compiled into a
+          transformer model. That model may be used to evaluate the efficacy of the interpretability tool. <br>
+
           As artificial models get increasingly capable and get more integrated into different aspects of our
-          daily
-          lives,
-          policy-makers may want to make sure that these models are safe for deployment. And, this paper may
-          have laid
-          the
-          groundwork for testing a subset of the tools that will be used to ensure the safety of artificial
-          models.
+          daily lives, policy-makers may want to make sure that these models are safe for deployment. And, this paper
+          may have laid the groundwork for testing a subset of the tools that will be used to ensure the safety of
+          artificial models.
         </p>
 
 
@@ -457,86 +465,55 @@
 
         <p style="text-align: justify;">
           This paper proposes a <em>restricted</em> programming language RASP, where a user can only use
-          operations
-          that
-          are roughly analogous to the workings of different modules of a transformer model. The authors argue
-          that
-          using RASP will allow
-          people to <em>"think like transformers"</em> and provide experimental evidence with some toy problems
-          that
-          human
-          intuition can even be <em>compiled</em> into transformer models.
+          operations that are roughly analogous to the workings of different modules of a transformer model. The authors
+          argue that using RASP will allow people to <em>"think like transformers"</em> and provide experimental
+          evidence with some toy problems that human intuition can even be <em>compiled</em> into transformer models.
         </p>
 
         <p style="text-align: justify;">
-          The strengths of this paper has been already discussed in this blog - RASP can be used as an
-          educational
-          tool
-          to devolop intuitions on how different modules of a transformer block work. It may even inform us on
-          how to
-          customize different
-          transformer architectures targeting specific problems. And, there might be a future where this
-          approach can
-          be
-          used to test a subset of tools for ensuring that a transformer model is safe for deployment, although
-          currently this is just a speculation of the authors of this blog.
+          The strengths of this paper has been already discussed in previous sections - RASP can be used as an
+          educational tool to devolop intuitions on how different components of a transformer block work. It may even
+          inform us on how to customize different transformer architectures targeting specific problems. And, there
+          might be a future
+          where this approach can be used to evaluate a subset of tools used for ensuring that a transformer model is
+          safe for deployment, although currently this is just a speculation by the authors of this blog.
         </p>
 
         <p style="text-align: justify;">
-          One weakness of this work is that RASP operations are not completely faithful to how different
-          components of
-          a
+          A weakness of this work is that RASP operations are not completely faithful to how different
+          components of a
           transformer block work in practice. For example:
         <ol style="text-align: justify;">
           <li>
-            RASP completely ignores Layernorms (<a href="https://arxiv.org/abs/1607.06450" target="_blank">Ba et
+            RASP completely ignores the Layernorms (<a href="https://arxiv.org/abs/1607.06450" target="_blank">Ba et
               al.
               2016</a>).
-            Layernorms are used in
-            transformers before each of
-            the attention and MLP operations, and also finally before decoding the latent back to vocabulary
-            space.
-            This
-            ensures stability in training and improves the performance. Element-wise operations in RASP, which
-            are
-            analogous to MLP, may be used to perform element-wise mathematical operations, such as;
-            multiplications
-            and
-            divisions. But, the effect of Layernorms may wash out these operations in practice.
+            Layernorms are used in transformers before each of the attention and MLP operations, and also finally before
+            decoding the latent back to vocabulary space. This ensures stability in training and improves the
+            performance (<a href="https://arxiv.org/abs/2305.02582" target="_blank">Brody et al. 2023</a>). Element-wise
+            operations in RASP, which are analogous to MLP transformations, may be used to perform element-wise
+            mathematical operations, such as; multiplications and divisions. But, the effect of Layernorms may wash out
+            these transformations in practice.
           </li>
 
           <li>
-            RASP makes the assumption that information stored in intermediate variables will be stored <em>as it
-              is</em>
-            in the
-            residual stream. In theory this may be achieved by ensuring mutually orthogonal subspaces for all
-            the
-            intermediate variables. However, in practice transformers only have a limited number of dimensions
-            in
-            the
-            residual stream. Thus it is most likely that subsequent attention and MLP modules may rewrite or
-            even
-            delete
-            some of those variables.
+            RASP makes the assumption that information stored in intermediate variables will be stored <em>as it is</em>
+            in the residual stream. In theory this may be achieved by ensuring mutually orthogonal subspaces for all the
+            intermediate variables. However, in practice transformers only have a limited number of dimensions in
+            the residual stream. Thus it is most likely that subsequent attention and MLP modules may rewrite or even
+            delete some of those variables.
           </li>
 
           <li>
-            RASP emulates the attention pattern with a binary <em>selector</em> and as a result all the values
-            that
-            get
-            <em>attended</em> by a query
-            gets equal amounts of <em>attention</em>. In practice, however, the attention pattern has continuous
-            values
-            and
-            attention paid to every single value can be different.
+            RASP emulates the attention pattern with a binary <em>selector</em> and as a result all the values that get
+            <em>attended</em> by a query will get equal <em>attention</em>. In practice, however, the
+            attention pattern has continuous values and attention paid to every single value can be different.
           </li>
 
         </ol>
 
-        Despite certain weaknesses this paper can be lauded for the novelty of its main idea. Overall the paper
-        was
-        well
-        presented and easy to follow.
+        Despite certain limitations this paper can be lauded for the novelty of its main idea. Overall the paper
+        was well presented and easy to follow.
 
         </p>
 
@@ -597,6 +574,14 @@
           <a href="https://arxiv.org/abs/1607.06450">
             <em>"Layer normalization."</em>
           </a> (2016)
+        </p>
+
+        <p>
+          <a name="brody-2023">[2]</a>
+          Brody, Shaked, Uri Alon, and Eran Yahav.
+          <a href="https://arxiv.org/abs/2305.02582">
+            <em>"On the Expressivity Role of LayerNorm in Transformers' Attention."</em>
+          </a> (2023)
         </p>
 
         <h2>Team Members</h2>

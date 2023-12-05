@@ -103,7 +103,7 @@ figcaption {
 }
 
 :checked + .alert {
-  display: none;
+  /* display: none; */
 }
 
 .alertText {
