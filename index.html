@@ -406,6 +406,13 @@
 
         <h2> Related Works </h2>
 
+        <p style="text-align: justify;">
+        Prior to this work, expressing RNNs as automata was an active line of research, seemingly inaugurated by <a href="#giles-1992">[1]</a>. Certain problem formulations provided access to training examples, while others allowed access to model weights or activations <a href="#omlin-1996">[2]</a>, and still others constrained the extractor to use model outputs only <a href="#weiss-2018">[3]</a> <a href="#ayache-2019">[4]</a>. Similarly, using automata to characterize the expressive power of RNNs was tackled in <a href="#rabusseau-2019">[5]</a>, which focused on second-order RNNs, and in <a href="#merrill-2019">[6]</a> and <a href="#merrill-2020">[7]</a>, both of which restricted their attention to “saturated” RNNs, or RNNs in which all the activation functions have been replaced with step functions.
+        </p><p style="text-align: justify;">
+        At the time this paper was published, analogous work for transformers was more tightly-scoped: <a href="#yun-2019">[8]</a> showed that transformers are expressive enough to approximate arbitrary continuous sequence-to-sequence functions; <a href="#hahn-2020">[9]</a>, by contrast, showed that fixed-size transformers are unable to model both periodic finite-state languages and hierarchical structure; finally, <a href="#perez-2021">[10]</a> showed that some transformer variants are Turing complete.
+        </p>
+
+
         <h2> Applications </h2>
         <br>
         <h4> Testing Interpretability Tools </h4>
@@ -610,6 +617,86 @@
           <a href="https://arxiv.org/abs/2304.14997">
             <em>"Towards Automated Circuit Discovery for Mechanistic Interpretability."</em>
           </a> (2023)
+        </p>
+
+        <p>
+          <a name="giles-1992">[2]</a>
+          C. L. Giles, C. B. Miller, D. Chen, H. H. Chen, G. Z. Sun, and Y. C. Lee.
+          <a href="https://direct.mit.edu/neco/article-abstract/4/3/393/5641/Learning-and-Extracting-Finite-State-Automata-with?redirectedFrom=fulltext">
+            <em>"Learning and Extracting Finite State Automata with Second-Order Recurrent Neural Networks."</em>
+          </a> (1992)
+        </p>
+
+        <p>
+          <a name="omlin-1996">[2]</a>
+          Christian W. Omlin, and C.Lee Giles.
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/0893608095000860?via%3Dihub">
+            <em>"Extraction of rules from discrete-time recurrent neural networks."</em>
+          </a> (1996)
+        </p>
+
+        <p>
+          <a name="weiss-2018">[2]</a>
+          Gail Weiss, Yoav Goldberg, and Eran Yahav.
+          <a href="https://proceedings.mlr.press/v80/weiss18a.html">
+            <em>"Extracting automata from recurrent neural networks using queries and counterexamples."</em>
+          </a> (2018)
+        </p>
+
+        <p>
+          <a name="ayache-2019">[2]</a>
+          Stephane Ayache, Remi Eyraud, and Noe Goudian.
+          <a href="https://proceedings.mlr.press/v93/ayache19a/ayache19a.pdf">
+            <em>"Explaining Black Boxes on Sequential Data using Weighted Automata."</em>
+          </a> (2019)
+        </p>
+
+        <p>
+          <a name="rabusseau-2019">[2]</a>
+          Guillaume Rabusseau, Tianyu Li, and Doina Precup.
+          <a href="https://proceedings.mlr.press/v89/rabusseau19a.html">
+            <em>"Connecting Weighted Automata and Recurrent Neural Networks through Spectral Learning."</em>
+          </a> (2019)
+        </p>
+
+        <p>
+          <a name="merrill-2019">[2]</a>
+          William Merrill.
+          <a href="https://arxiv.org/abs/1906.01615">
+            <em>"Sequential Neural Networks as Automata."</em>
+          </a> (2019)
+        </p>
+
+        <p>
+          <a name="merrill-2020">[2]</a>
+          William Merrill, Gail Weiss, Yoav Goldberg, Roy Schwartz, Noah A. Smith, and Eran Yahav.
+          <a href="https://aclanthology.org/2020.acl-main.43/">
+            <em>"A Formal Hierarchy of RNN Architectures."</em>
+          </a> (2020)
+        </p>
+
+        <p>
+          <a name="yun-2019">[2]</a>
+          Chulhee Yun, Srinadh Bhojanapalli, Ankit Singh Rawat, Sashank J. Reddi, and Sanjiv Kumar.
+          <a href="https://arxiv.org/abs/1912.10077">
+            <em>"Are Transformers universal approximators of sequence-to-sequence functions?."</em>
+          </a> (2019)
+        </p>
+
+        <p>
+          <a name="hahn-2020">[2]</a>
+          Michael Hahn.
+          <a href="https://transacl.org/ojs/index.php/tacl/article/view/1815">
+            <em>"Theoretical Limitations of Self-Attention in Neural Sequence Models."</em>
+          </a> (2020)
+        </p>
+
+        <p>
+          <a name="perez-2021">[2]</a>
+          Jorge Pérez, Pablo Barceló, Javier Marinkovic.
+          <a href="https://jmlr.org/papers/v22/20-302.html">
+            <em>"Attention is Turing-Complete."</em>
+          </a> (2021)
         </p>
 
         <h2>Team Members</h2>
