@@ -486,6 +486,25 @@
 
         <h2> Follow-on Research </h2>
 
+        We suggest two possible avenues of further research:
+        <h3>When does gradient descent find a RASP program?</h3>
+
+        <p style="text-align: justify;">
+        Strikingly, the authors observe an example of a model trained on the Histogram-BOS task ultimately matching the attention pattern of the equivalent RASP program. How often—and under which conditions—does this happen?
+        </p><p style="text-align: justify;">
+        There are many of ways to approach this, but one might involve generating random RASP programs as targets, and then training transformer architectures chosen to match the targets while varying the random seed. How often does SGD find an equivalent attention pattern? How does that vary with model size or program type? The extent to which RASP is a useful avenue of further research is closely related to its ability to mimic the inductive biases of real-world transformer models, and the hope is that this research agenda could shed light on that.
+        </p>
+        <h3>Can RASP inspire improvements to the transformer architecture?</h3>
+        </p><p style="text-align: justify;">
+        One of the ways Weiss et al. demonstrate the value of RASP is by describing its ability to explain the findings of <a href="#press-2020">[1]</a>. In  that paper, the authors show that a transformer architecture which has more attention sublayers early in the model, and more MLP sublayers later, outperforms standard transformers on language modeling tasks. Weiss et al. explain this with reference to RASP:
+        </p><p style="text-align: justify;">
+        <blockquote>"In RASP, there is little value to repeated elementwise operations before the first aggregate: each position has only its initial input, and cannot generate new information. ... In contrast, an architecture beginning with several attention sublayers—i.e., multiple select-aggregate pairs—will be able to gather a large amount of information into each position early in the computation, even if only by simple rules"</blockquote>
+        </p><p style="text-align: justify;">
+        Although this kind of reasoning is prompted by existing architectures, the process could in principle run in reverse: perhaps there are lessons to be taken from the structure of RASP programs which are relevant to designing better "transformer-esque architectures?"
+        </p><p style="text-align: justify;">
+        An example of this process might take inspiration from the findings of <a href="deletang-2022">[2]</a> which identified tasks which a transformer could theoretically solve, but for which empirical training did not converge to a solution. RASP programs for those tasks could shed light on the kinds of architectures with the right inductive bias for those tasks.
+        </p>
+
         <h2> About the Authors </h2>
 
         <p style="text-align: justify;">
@@ -705,6 +724,14 @@
           <a href="https://jmlr.org/papers/v22/20-302.html">
             <em>"Attention is Turing-Complete."</em>
           </a> (2021)
+        </p>
+
+        <p>
+          <a name="deletang-2022">[2]</a>
+          Grégoire Delétang, Anian Ruoss, Jordi Grau-Moya, Tim Genewein, Li Kevin Wenliang, Elliot Catt, Chris Cundy, Marcus Hutter, Shane Legg, Joel Veness, and Pedro A. Ortega.
+          <a href="https://arxiv.org/abs/2207.02098">
+            <em>"Neural Networks and the Chomsky Hierarchy."</em>
+          </a> (2022)
         </p>
 
         <h2>Team Members</h2>
