@@ -62,8 +62,28 @@
           your findings.
         </p> -->
         <h2> Introduction/Motivation </h2>
+        <p style="text-align: justify;">
+        Transformer models are famously opaque, made up of millions—sometimes billions—of uninterpretable parameters.
+        It's natural to ask if there is a better representation of these parameters.
+        <i>Thinking Like Transformers</i> argues that sometimes the answer is "yes," and that the better representation takes the form of a programming language called RASP, short for Restricted Access Sequence Processing Language.
+        </p><p style="text-align: justify;">
+        RASP is a simple language designed to be “compiled” to transformer weights.
+        Like transformers, RASP programs take sequences as input and produce different sequences as output.
+        Again like transformers, the structure of the RASP language is three-fold:
+        </p><p style="text-align: justify;">
+        First, every program starts with tokens (the input to a program, of the kind you might see in a context window) and indices (a sequence of integers between <i>0</i> and <i>n-1</i>, where <i>n</i> is the length of tokens).
+        By analogy to the tokens and positional embeddings of a transformer, the tokens and indices of a RASP program combine to give sequential structure to user input.
+        </p><p style="text-align: justify;">
+        The next kind of RASP program component is the element-wise operation, analogous to the MLP components of trained transformer.
+        These will be familiar: we can use <span style="font-family: 'Courier New', Courier, monospace;"><b>+</b></span> to add two sequences; <span style="font-family: 'Courier New', Courier, monospace;"><b>pow(., .)</b></span> to exponentiate each element in a sequence; <span style="font-family: 'Courier New', Courier, monospace;"><b>&lt;</b></span>,<span style="font-family: 'Courier New', Courier, monospace;"><b>&gt;</b></span>,<span style="font-family: 'Courier New', Courier, monospace;"><b>&lt;=</b></span>,<span style="font-family: 'Courier New', Courier, monospace;"><b>&gt;=</b></span>, and <span style="font-family: 'Courier New', Courier, monospace;"><b>==</b></span> to express predicates over two elements; and so on.
+        </p><p style="text-align: justify;">
+        Most importantly, we also have an attention mechanism analogue: the <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> and <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span> operations. Although a fuller description can be found <a href="#diagram">below</a>, at a high level, <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> combines two sequences with a predicate, generating a matrix containing the result of applying the predicate to  every possible combination of sequence elements. <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>, subsequently, will combine that resulting matrix with a third sequence to produce a new sequence. If you squint, you can see how the key and query vectors of the transformer's attention mechanism are treated similarly to the inputs to <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span>, and how the value vectors of the transformer are analogous to the the sequence input of <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>.
+        </p><p style="text-align: justify;">
+        What can you actually do with RASP? A few things. First, having constructed a RASP program, you have also established an upper bound on the number of layers and attention heads needed to express your algorithm. Second, and more speculatively, you might think you've improved your intuitive sense of what a trained model might be doing internally when it performs the task expressed by your program. (The authors find that a trained model will sometimes, but not always, embody the algorithm implied by the equivalent RASP program.) Finally, RASP can be used as "laboratory for interpretability" [1 (Linder 2023)]. When trained transformer models are interpreted, it is often unclear when or how full success is achieved. Using RASP programs as interpretation targets can serve as a ground truth for interpretability methods. [2 (Conmy 2023)]
+        </p>
 
-        <h2> <b>R</b>estricted <b>A</b>ccess <b>S</b>equence <b>P</b>rocessing (RASP) </h2>
+
+        <h2 id="diagram"> <b>R</b>estricted <b>A</b>ccess <b>S</b>equence <b>P</b>rocessing (RASP) </h2>
 
         <br>
         <h4> Analogues to components in a transformer block</h4>
@@ -581,6 +601,14 @@
           Brody, Shaked, Uri Alon, and Eran Yahav.
           <a href="https://arxiv.org/abs/2305.02582">
             <em>"On the Expressivity Role of LayerNorm in Transformers' Attention."</em>
+          </a> (2023)
+        </p>
+
+        <p>
+          <a name="conmy-2023">[2]</a>
+          Arthur Conmy, Augustine N. Mavor-Parker, Aengus Lynch, Stefan Heimersheim, and Adrià Garriga-Alonso.
+          <a href="https://arxiv.org/abs/2304.14997">
+            <em>"Towards Automated Circuit Discovery for Mechanistic Interpretability."</em>
           </a> (2023)
         </p>
 
