@@ -46,8 +46,8 @@
       <div class="col justify-content-center text-center">
         <!-- <h2>An Analysis of [papername]</h2> -->
         <!-- <p>Describe the paper and the big question about it that interests you.</p> -->
-        Analysis by <a href="https://diatkinson.github.io/" target="_blank">David Atkinson</a> and <a href="https://arnab-api.github.io/"
-          target="_blank">Arnab Sen Sharma</a>
+        Analysis by <a href="https://diatkinson.github.io/" target="_blank">David Atkinson</a> and <a
+          href="https://arnab-api.github.io/" target="_blank">Arnab Sen Sharma</a>
       </div>
     </div>
     <div class="row">
@@ -63,23 +63,64 @@
         </p> -->
         <h2> Introduction/Motivation </h2>
         <p style="text-align: justify;">
-        Transformer models are famously opaque, made up of millions&mdash;sometimes billions&#8212;of uninterpretable parameters.
-        It's natural to ask if there is a better representation of these parameters.
-        <i>Thinking Like Transformers</i> argues that sometimes the answer is "yes," and that the better representation takes the form of a programming language called RASP, short for Restricted Access Sequence Processing Language.
-        </p><p style="text-align: justify;">
-        RASP is a simple language designed to be &ldquo;compiled&rdquo; to transformer weights.
-        Like transformers, RASP programs take sequences as input and produce different sequences as output.
-        Again like transformers, the structure of the RASP language is three-fold:
-        </p><p style="text-align: justify;">
-        First, every program starts with tokens (the input to a program, of the kind you might see in a context window) and indices (a sequence of integers between <i>0</i> and <i>n-1</i>, where <i>n</i> is the length of tokens).
-        By analogy to the tokens and positional embeddings of a transformer, the tokens and indices of a RASP program combine to give sequential structure to user input.
-        </p><p style="text-align: justify;">
-        The next kind of RASP program component is the element-wise operation, analogous to the MLP components of trained transformer.
-        These will be familiar: we can use <span style="font-family: 'Courier New', Courier, monospace;"><b>+</b></span> to add two sequences; <span style="font-family: 'Courier New', Courier, monospace;"><b>pow(., .)</b></span> to exponentiate each element in a sequence; <span style="font-family: 'Courier New', Courier, monospace;"><b>&lt;</b></span>,<span style="font-family: 'Courier New', Courier, monospace;"><b>&gt;</b></span>,<span style="font-family: 'Courier New', Courier, monospace;"><b>&lt;=</b></span>,<span style="font-family: 'Courier New', Courier, monospace;"><b>&gt;=</b></span>, and <span style="font-family: 'Courier New', Courier, monospace;"><b>==</b></span> to express predicates over two elements; and so on.
-        </p><p style="text-align: justify;">
-        Most importantly, we also have an attention mechanism analogue: the <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> and <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span> operations. Although a fuller description can be found <a href="#diagram">below</a>, at a high level, <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> combines two sequences with a predicate, generating a matrix containing the result of applying the predicate to  every possible combination of sequence elements. <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>, subsequently, will combine that resulting matrix with a third sequence to produce a new sequence. If you squint, you can see how the key and query vectors of the transformer's attention mechanism are treated similarly to the inputs to <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span>, and how the value vectors of the transformer are analogous to the the sequence input of <span style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>.
-        </p><p style="text-align: justify;">
-        What can you actually do with RASP? A few things. First, having constructed a RASP program, you have also established an upper bound on the number of layers and attention heads needed to express your algorithm. Second, and more speculatively, you might think you've improved your intuitive sense of what a trained model might be doing internally when it performs the task expressed by your program. (The authors find that a trained model will sometimes, but not always, embody the algorithm implied by the equivalent RASP program.) Finally, RASP can be used as "laboratory for interpretability." <a href="#lindner-2023">[1]</a> When trained transformer models are interpreted, it is often unclear when or how full success is achieved. Using RASP programs as interpretation targets can serve as a ground truth for interpretability methods. <a href="#conmy-2023">[2]</a>
+          Transformer models are famously opaque, made up of millions&mdash;sometimes billions&#8212;of uninterpretable
+          parameters.
+          It's natural to ask if there is a better representation of these parameters.
+          <i>Thinking Like Transformers</i> argues that sometimes the answer is "yes," and that the better
+          representation takes the form of a programming language called RASP, short for Restricted Access Sequence
+          Processing Language.
+        </p>
+        <p style="text-align: justify;">
+          RASP is a simple language designed to be &ldquo;compiled&rdquo; to transformer weights.
+          Like transformers, RASP programs take sequences as input and produce different sequences as output.
+          Again like transformers, the structure of the RASP language is three-fold:
+        </p>
+        <p style="text-align: justify;">
+          First, every program starts with tokens (the input to a program, of the kind you might see in a context
+          window) and indices (a sequence of integers between <i>0</i> and <i>n-1</i>, where <i>n</i> is the length of
+          tokens).
+          By analogy to the tokens and positional embeddings of a transformer, the tokens and indices of a RASP program
+          combine to give sequential structure to user input.
+        </p>
+        <p style="text-align: justify;">
+          The next kind of RASP program component is the element-wise operation, analogous to the MLP components of
+          trained transformer.
+          These will be familiar: we can use <span
+            style="font-family: 'Courier New', Courier, monospace;"><b>+</b></span> to add two sequences; <span
+            style="font-family: 'Courier New', Courier, monospace;"><b>pow(., .)</b></span> to exponentiate each element
+          in a sequence; <span style="font-family: 'Courier New', Courier, monospace;"><b>&lt;</b></span>,<span
+            style="font-family: 'Courier New', Courier, monospace;"><b>&gt;</b></span>,<span
+            style="font-family: 'Courier New', Courier, monospace;"><b>&lt;=</b></span>,<span
+            style="font-family: 'Courier New', Courier, monospace;"><b>&gt;=</b></span>, and <span
+            style="font-family: 'Courier New', Courier, monospace;"><b>==</b></span> to express predicates over two
+          elements; and so on.
+        </p>
+        <p style="text-align: justify;">
+          Most importantly, we also have an attention mechanism analogue: the <span
+            style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> and <span
+            style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span> operations.
+          Although a fuller description can be found <a href="#diagram">below</a>, at a high level, <span
+            style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> combines
+          two sequences with a predicate, generating a matrix containing the result of applying the predicate to every
+          possible combination of sequence elements. <span
+            style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>,
+          subsequently, will combine that resulting matrix with a third sequence to produce a new sequence. If you
+          squint, you can see how the key and query vectors of the transformer's attention mechanism are treated
+          similarly to the inputs to <span
+            style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span>, and how
+          the value vectors of the transformer are analogous to the the sequence input of <span
+            style="color: darkred; font-family: 'Courier New', Courier, monospace;"><b>aggregate</b></span>.
+        </p>
+        <p style="text-align: justify;">
+          What can you actually do with RASP? A few things. First, having constructed a RASP program, you have also
+          established an upper bound on the number of layers and attention heads needed to express your algorithm.
+          Second, and more speculatively, you might think you've improved your intuitive sense of what a trained model
+          might be doing internally when it performs the task expressed by your program. (The authors find that a
+          trained model will sometimes, but not always, embody the algorithm implied by the equivalent RASP program.)
+          Finally, RASP can be used as "laboratory for interpretability." <a href="#lindner-2023">[1]</a> When trained
+          transformer models are interpreted, it is often unclear when or how full success is achieved. Using RASP
+          programs as interpretation targets can serve as a ground truth for interpretability methods. <a
+            href="#conmy-2023">[2]</a>
         </p>
 
 
@@ -249,8 +290,8 @@
         </figure>
         <br>
 
-        From here on, we will borrow the following concise diagram from <a href="https://github.com/srush/raspy"
-          target="_blank"><u>RASPy</u></a> to illustrate how a single attention head is
+        From here on, we will borrow the following concise diagram from <i>RASPy</i> <a href="#raspy">[3]</a> to
+        illustrate how a single attention head is
         emulated
         using a pair of
         <span style="color: palevioletred; font-family: 'Courier New', Courier, monospace;"><b>select</b></span> -
@@ -276,8 +317,7 @@
         <div class="alert warning">
           <span class="alertText" style="color:black; text-align: left;">
             ** In RASP, values are aggregated as the mean. However, in this analysis we show aggregation as sum,
-            similar to the implementation of <a href="https://github.com/srush/raspy" target="_blank"
-              style="color: darkblue;"><i><u>RASPy</u></i></a>.
+            similar to the implementation of <i>RASPy</i> <a href="#raspy">[3]</a>.
             </ul>
           </span>
         </div>
@@ -395,9 +435,11 @@
           </figcaption>
         </figure>
 
-        Two followup works by <a href="https://arxiv.org/pdf/2301.05062.pdf" target="_blank">Lindner et al
-          2023</a> and
-        <a href="https://arxiv.org/pdf/2306.01128.pdf" target="_blank">Friedman et al 2023</a> presented
+        Two followup works by Lindner et al, 2023 <a href="#lindner-2023">[1]</a>
+        and
+        Friedman et al, 2023
+        <a href="#friedman-2023">[2]</a>
+        presented
         compilers that
         generate a transformer
         model given a RASP program and a set of input-output demonstration pairs.
@@ -407,9 +449,21 @@
         <h2> Related Works </h2>
 
         <p style="text-align: justify;">
-        Prior to this work, expressing RNNs as automata was an active line of research, seemingly inaugurated by <a href="#giles-1992">[1]</a>. Certain problem formulations provided access to training examples, while others allowed access to model weights or activations <a href="#omlin-1996">[2]</a>, and still others constrained the extractor to use model outputs only <a href="#weiss-2018">[3]</a> <a href="#ayache-2019">[4]</a>. Similarly, using automata to characterize the expressive power of RNNs was tackled in <a href="#rabusseau-2019">[5]</a>, which focused on second-order RNNs, and in <a href="#merrill-2019">[6]</a> and <a href="#merrill-2020">[7]</a>, both of which restricted their attention to &ldquo;saturated&rdquo; RNNs, or RNNs in which all the activation functions have been replaced with step functions.
-        </p><p style="text-align: justify;">
-        At the time this paper was published, analogous work for transformers was more tightly-scoped: <a href="#yun-2019">[8]</a> showed that transformers are expressive enough to approximate arbitrary continuous sequence-to-sequence functions; <a href="#hahn-2020">[9]</a>, by contrast, showed that fixed-size transformers are unable to model both periodic finite-state languages and hierarchical structure; finally, <a href="#perez-2021">[10]</a> showed that some transformer variants are Turing complete.
+          Prior to this work, expressing RNNs as automata was an active line of research, seemingly inaugurated by <a
+            href="#giles-1992">[1]</a>. Certain problem formulations provided access to training examples, while others
+          allowed access to model weights or activations <a href="#omlin-1996">[2]</a>, and still others constrained the
+          extractor to use model outputs only <a href="#weiss-2018">[3]</a> <a href="#ayache-2019">[4]</a>. Similarly,
+          using automata to characterize the expressive power of RNNs was tackled in <a href="#rabusseau-2019">[5]</a>,
+          which focused on second-order RNNs, and in <a href="#merrill-2019">[6]</a> and <a
+            href="#merrill-2020">[7]</a>, both of which restricted their attention to &ldquo;saturated&rdquo; RNNs, or
+          RNNs in which all the activation functions have been replaced with step functions.
+        </p>
+        <p style="text-align: justify;">
+          At the time this paper was published, analogous work for transformers was more tightly-scoped: <a
+            href="#yun-2019">[8]</a> showed that transformers are expressive enough to approximate arbitrary continuous
+          sequence-to-sequence functions; <a href="#hahn-2020">[9]</a>, by contrast, showed that fixed-size transformers
+          are unable to model both periodic finite-state languages and hierarchical structure; finally, <a
+            href="#perez-2021">[10]</a> showed that some transformer variants are Turing complete.
         </p>
 
 
@@ -491,29 +545,67 @@
         <h3>When does gradient descent find a RASP program?</h3>
 
         <p style="text-align: justify;">
-        Strikingly, the authors observe an example of a model trained on the Histogram-BOS task ultimately matching the attention pattern of the equivalent RASP program. How often&mdash;and under which conditions&mdash;does this happen?
-        </p><p style="text-align: justify;">
-        There are many of ways to approach this, but one might involve generating random RASP programs as targets, and then training transformer architectures chosen to match the targets while varying the random seed. How often does SGD find an equivalent attention pattern? How does that vary with model size or program type? The extent to which RASP is a useful avenue of further research is closely related to its ability to mimic the inductive biases of real-world transformer models, and the hope is that this research agenda could shed light on that.
+          Strikingly, the authors observe an example of a model trained on the Histogram-BOS task ultimately matching
+          the attention pattern of the equivalent RASP program. How often&mdash;and under which conditions&mdash;does
+          this happen?
+        </p>
+        <p style="text-align: justify;">
+          There are many of ways to approach this, but one might involve generating random RASP programs as targets, and
+          then training transformer architectures chosen to match the targets while varying the random seed. How often
+          does SGD find an equivalent attention pattern? How does that vary with model size or program type? The extent
+          to which RASP is a useful avenue of further research is closely related to its ability to mimic the inductive
+          biases of real-world transformer models, and the hope is that this research agenda could shed light on that.
         </p>
         <h3>Can RASP inspire improvements to the transformer architecture?</h3>
-        </p><p style="text-align: justify;">
-        One of the ways Weiss et al. demonstrate the value of RASP is by describing its ability to explain the findings of <a href="#press-2020">[1]</a>. In  that paper, the authors show that a transformer architecture which has more attention sublayers early in the model, and more MLP sublayers later, outperforms standard transformers on language modeling tasks. Weiss et al. explain this with reference to RASP:
-        </p><p style="text-align: justify;">
-        <blockquote>"In RASP, there is little value to repeated elementwise operations before the first aggregate: each position has only its initial input, and cannot generate new information... In contrast, an architecture beginning with several attention sublayers&mdash;i.e., multiple select-aggregate pairs&mdash;will be able to gather a large amount of information into each position early in the computation, even if only by simple rules"</blockquote>
-        </p><p style="text-align: justify;">
-        Although this kind of reasoning is prompted by existing architectures, the process could in principle run in reverse: perhaps there are lessons to be taken from the structure of RASP programs which are relevant to designing better "transformer-esque architectures?"
-        </p><p style="text-align: justify;">
-        An example of this process might take inspiration from the findings of <a href="deletang-2022">[2]</a> which identified tasks which a transformer could theoretically solve, but for which empirical training did not converge to a solution. RASP programs for those tasks could shed light on the kinds of architectures with the right inductive bias for those tasks.
+        </p>
+        <p style="text-align: justify;">
+          One of the ways Weiss et al. demonstrate the value of RASP is by describing its ability to explain the
+          findings of <a href="#press-2020">[1]</a>. In that paper, the authors show that a transformer architecture
+          which has more attention sublayers early in the model, and more MLP sublayers later, outperforms standard
+          transformers on language modeling tasks. Weiss et al. explain this with reference to RASP:
+        </p>
+        <p style="text-align: justify;">
+        <blockquote>"In RASP, there is little value to repeated elementwise operations before the first aggregate: each
+          position has only its initial input, and cannot generate new information... In contrast, an architecture
+          beginning with several attention sublayers&mdash;i.e., multiple select-aggregate pairs&mdash;will be able to
+          gather a large amount of information into each position early in the computation, even if only by simple
+          rules"</blockquote>
+        </p>
+        <p style="text-align: justify;">
+          Although this kind of reasoning is prompted by existing architectures, the process could in principle run in
+          reverse: perhaps there are lessons to be taken from the structure of RASP programs which are relevant to
+          designing better "transformer-esque architectures?"
+        </p>
+        <p style="text-align: justify;">
+          An example of this process might take inspiration from the findings of <a href="deletang-2022">[2]</a> which
+          identified tasks which a transformer could theoretically solve, but for which empirical training did not
+          converge to a solution. RASP programs for those tasks could shed light on the kinds of architectures with the
+          right inductive bias for those tasks.
         </p>
 
         <h2> About the Authors </h2>
 
         <p style="text-align: justify;">
-        The first author of the paper, Gail Weiss, was a PhD student at the Technion when the work was completed. Advised by the other two authors, she focuses mostly on the intersection of neural networks and formal language theory. (She is the founder, for example, of the Formal Languages and Neural Networks (FLaNN) <a href="https://flann.super.site/">Discord</a>.) Today, she is a postdoc at EPFL, in France.
-        </p><p style="text-align: justify;">
-        Yoav Goldberg&mdash;also an Israeli computer scientist, although in this case, a professor at Bar Ilan University&mdash;was an early participant in NLP&apos;s embrace of neural networks. This led to a 2017 <a href="https://link.springer.com/book/10.1007/978-3-031-02165-7">book</a>, <i>Neural Network Methods for Natural Language Processing</i> and a series of highly cited papers in the mid-to-early 2010s attempting to understand word embeddings. In addition to his academic position, he also serves as Research Director at the Israeli branch of the Allen Institute for AI. He received his PhD at Ben-Gurion University, went on to a postdoc at Google Research, and sells t-shirts on the internet, available for sale <a href="https://www.zazzle.com/store/yoavgo">right now</a>.
-        </p><p style="text-align: justify;">
-        The final author, Eran Yahav, is a professor at Technion and CTO at TabNine (an early LLM-based coding assistant). His previous life is a bit of a mystery, although he was, at some point, affiliated with Tel-Aviv University. In his current life, he has written many machine learning papers on program analysis, program synthesis, and programming languages.
+          The first author of the paper, Gail Weiss, was a PhD student at the Technion when the work was completed.
+          Advised by the other two authors, she focuses mostly on the intersection of neural networks and formal
+          language theory. (She is the founder, for example, of the Formal Languages and Neural Networks (FLaNN) <a
+            href="https://flann.super.site/">Discord</a>.) Today, she is a postdoc at EPFL, in France.
+        </p>
+        <p style="text-align: justify;">
+          Yoav Goldberg&mdash;also an Israeli computer scientist, although in this case, a professor at Bar Ilan
+          University&mdash;was an early participant in NLP&apos;s embrace of neural networks. This led to a 2017 <a
+            href="https://link.springer.com/book/10.1007/978-3-031-02165-7">book</a>, <i>Neural Network Methods for
+            Natural Language Processing</i> and a series of highly cited papers in the mid-to-early 2010s attempting to
+          understand word embeddings. In addition to his academic position, he also serves as Research Director at the
+          Israeli branch of the Allen Institute for AI. He received his PhD at Ben-Gurion University, went on to a
+          postdoc at Google Research, and sells t-shirts on the internet, available for sale <a
+            href="https://www.zazzle.com/store/yoavgo">right now</a>.
+        </p>
+        <p style="text-align: justify;">
+          The final author, Eran Yahav, is a professor at Technion and CTO at TabNine (an early LLM-based coding
+          assistant). His previous life is a bit of a mystery, although he was, at some point, affiliated with Tel-Aviv
+          University. In his current life, he has written many machine learning papers on program analysis, program
+          synthesis, and programming languages.
         </p>
 
         <h2> Review </h2>
@@ -582,7 +674,7 @@
         </p> -->
 
         <p>
-          <a name="lindner-2023">[2]</a>
+          <a name="lindner-2023">[1]</a>
           Lindner, David, J&aacute;nos Kram&aacute;r, Matthew Rahtz, Thomas McGrath, and Vladimir Mikulik.
           <a href="https://arxiv.org/abs/2301.05062">
             <em>"Tracr: Compiled transformers as a laboratory for interpretability."</em>
@@ -598,7 +690,7 @@
         </p>
 
         <p>
-          <a name="raspy">[2]</a>
+          <a name="raspy">[3]</a>
           Sasha Rush and Gail Weiss.
           <a href="https://srush.github.io/raspy/">
             <em>"RASPy"</em>
@@ -606,8 +698,9 @@
         </p>
 
         <p>
-          <a name="vaswani-2017">[2]</a>
-          Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, &Lstrok;ukasz Kaiser, and
+          <a name="vaswani-2017">[4]</a>
+          Vaswani, Ashish, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, &Lstrok;ukasz
+          Kaiser, and
           Illia Polosukhin.
           <a
             href="https://proceedings.neurips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">
@@ -616,7 +709,7 @@
         </p>
 
         <p>
-          <a name="press-2019">[2]</a>
+          <a name="press-2019">[5]</a>
           Press, Ofir, Noah A. Smith, and Omer Levy.
           <a href="https://arxiv.org/abs/1911.03864">
             <em>"Improving transformer models by reordering their sublayers."</em>
@@ -624,7 +717,7 @@
         </p>
 
         <p>
-          <a name="ba-2016">[2]</a>
+          <a name="ba-2016">[6]</a>
           Ba, Jimmy Lei, Jamie Ryan Kiros, and Geoffrey E. Hinton.
           <a href="https://arxiv.org/abs/1607.06450">
             <em>"Layer normalization."</em>
@@ -632,7 +725,7 @@
         </p>
 
         <p>
-          <a name="brody-2023">[2]</a>
+          <a name="brody-2023">[7]</a>
           Brody, Shaked, Uri Alon, and Eran Yahav.
           <a href="https://arxiv.org/abs/2305.02582">
             <em>"On the Expressivity Role of LayerNorm in Transformers' Attention."</em>
@@ -640,7 +733,7 @@
         </p>
 
         <p>
-          <a name="conmy-2023">[2]</a>
+          <a name="conmy-2023">[8]</a>
           Arthur Conmy, Augustine N. Mavor-Parker, Aengus Lynch, Stefan Heimersheim, and Adri&aacute; Garriga-Alonso.
           <a href="https://arxiv.org/abs/2304.14997">
             <em>"Towards Automated Circuit Discovery for Mechanistic Interpretability."</em>
@@ -648,15 +741,16 @@
         </p>
 
         <p>
-          <a name="giles-1992">[2]</a>
+          <a name="giles-1992">[9]</a>
           C. L. Giles, C. B. Miller, D. Chen, H. H. Chen, G. Z. Sun, and Y. C. Lee.
-          <a href="https://direct.mit.edu/neco/article-abstract/4/3/393/5641/Learning-and-Extracting-Finite-State-Automata-with?redirectedFrom=fulltext">
+          <a
+            href="https://direct.mit.edu/neco/article-abstract/4/3/393/5641/Learning-and-Extracting-Finite-State-Automata-with?redirectedFrom=fulltext">
             <em>"Learning and Extracting Finite State Automata with Second-Order Recurrent Neural Networks."</em>
           </a> (1992)
         </p>
 
         <p>
-          <a name="omlin-1996">[2]</a>
+          <a name="omlin-1996">[10]</a>
           Christian W. Omlin, and C.Lee Giles.
           <a href="https://www.sciencedirect.com/science/article/abs/pii/0893608095000860?via%3Dihub">
             <em>"Extraction of rules from discrete-time recurrent neural networks."</em>
@@ -664,7 +758,7 @@
         </p>
 
         <p>
-          <a name="weiss-2018">[2]</a>
+          <a name="weiss-2018">[11]</a>
           Gail Weiss, Yoav Goldberg, and Eran Yahav.
           <a href="https://proceedings.mlr.press/v80/weiss18a.html">
             <em>"Extracting automata from recurrent neural networks using queries and counterexamples."</em>
@@ -672,7 +766,7 @@
         </p>
 
         <p>
-          <a name="ayache-2019">[2]</a>
+          <a name="ayache-2019">[12]</a>
           Stephane Ayache, Remi Eyraud, and Noe Goudian.
           <a href="https://proceedings.mlr.press/v93/ayache19a/ayache19a.pdf">
             <em>"Explaining Black Boxes on Sequential Data using Weighted Automata."</em>
@@ -680,7 +774,7 @@
         </p>
 
         <p>
-          <a name="rabusseau-2019">[2]</a>
+          <a name="rabusseau-2019">[13]</a>
           Guillaume Rabusseau, Tianyu Li, and Doina Precup.
           <a href="https://proceedings.mlr.press/v89/rabusseau19a.html">
             <em>"Connecting Weighted Automata and Recurrent Neural Networks through Spectral Learning."</em>
@@ -688,7 +782,7 @@
         </p>
 
         <p>
-          <a name="merrill-2019">[2]</a>
+          <a name="merrill-2019">[14]</a>
           William Merrill.
           <a href="https://arxiv.org/abs/1906.01615">
             <em>"Sequential Neural Networks as Automata."</em>
@@ -696,7 +790,7 @@
         </p>
 
         <p>
-          <a name="merrill-2020">[2]</a>
+          <a name="merrill-2020">[15]</a>
           William Merrill, Gail Weiss, Yoav Goldberg, Roy Schwartz, Noah A. Smith, and Eran Yahav.
           <a href="https://aclanthology.org/2020.acl-main.43/">
             <em>"A Formal Hierarchy of RNN Architectures."</em>
@@ -704,7 +798,7 @@
         </p>
 
         <p>
-          <a name="yun-2019">[2]</a>
+          <a name="yun-2019">[16]</a>
           Chulhee Yun, Srinadh Bhojanapalli, Ankit Singh Rawat, Sashank J. Reddi, and Sanjiv Kumar.
           <a href="https://arxiv.org/abs/1912.10077">
             <em>"Are Transformers universal approximators of sequence-to-sequence functions?."</em>
@@ -712,7 +806,7 @@
         </p>
 
         <p>
-          <a name="hahn-2020">[2]</a>
+          <a name="hahn-2020">[17]</a>
           Michael Hahn.
           <a href="https://transacl.org/ojs/index.php/tacl/article/view/1815">
             <em>"Theoretical Limitations of Self-Attention in Neural Sequence Models."</em>
@@ -720,7 +814,7 @@
         </p>
 
         <p>
-          <a name="perez-2021">[2]</a>
+          <a name="perez-2021">[18]</a>
           Jorge P&eacute;rez, Pablo Barcel&oacute;, Javier Marinkovic.
           <a href="https://jmlr.org/papers/v22/20-302.html">
             <em>"Attention is Turing-Complete."</em>
@@ -728,8 +822,9 @@
         </p>
 
         <p>
-          <a name="deletang-2022">[2]</a>
-          Gr&eacute;goire Del&eacute;tang, Anian Ruoss, Jordi Grau-Moya, Tim Genewein, Li Kevin Wenliang, Elliot Catt, Chris Cundy, Marcus Hutter, Shane Legg, Joel Veness, and Pedro A. Ortega.
+          <a name="deletang-2022">[19]</a>
+          Gr&eacute;goire Del&eacute;tang, Anian Ruoss, Jordi Grau-Moya, Tim Genewein, Li Kevin Wenliang, Elliot Catt,
+          Chris Cundy, Marcus Hutter, Shane Legg, Joel Veness, and Pedro A. Ortega.
           <a href="https://arxiv.org/abs/2207.02098">
             <em>"Neural Networks and the Chomsky Hierarchy."</em>
           </a> (2022)
